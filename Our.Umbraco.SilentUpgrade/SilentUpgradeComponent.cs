@@ -13,7 +13,7 @@
  *  and then remove the redirect to /install that the core httpModule has put in place
  *  for the update. 
  *  
- *  Will only run when app setting is precent in web.config to turn it on.
+ *  Will only run when app setting is present in web.config to turn it on.
  *  
  *  <add key="SilentUpgrade" value="true />
  */
@@ -47,7 +47,7 @@ namespace Our.Umbraco.SilentUpgrade
     }
 
     /// <summary>
-    ///  SilentUpgradeComponent -  Runs the 'upgreade' steps.
+    ///  SilentUpgradeComponent -  Runs the 'upgrade' steps.
     /// </summary>
     public class SilentUpgradeComponent : IComponent
     {
