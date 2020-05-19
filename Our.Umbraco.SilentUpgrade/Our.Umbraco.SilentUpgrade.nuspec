@@ -1,0 +1,26 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2011/10/nuspec.xsd">
+  <metadata>
+    <id>Our.Umbraco.SilentUpgrade</id>
+    <version>8.0.0</version>
+    <title>Silent Upgrades for Umbraco</title>
+    <authors>Kevin Jump</authors>
+    <owners>Jumoo</owners>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description><![CDATA[Performs the Umbraco upgrades in the background so you (and your users) don't see the install screen]]></description>
+    <summary>Performs Umbraco upgrades in the background.</summary>
+    <releaseNotes><![CDATA[
+    8.0.0 - Initial Release for v8
+    ]]></releaseNotes>
+    <dependencies>
+			<group targetFramework=".NETFramework4.7.2">
+			  <dependency id="UmbracoCms.Web" version="[8,9)"/>
+			</group>
+    </dependencies>
+    <tags>umbraco, umbraco-cms</tags>
+    <repository type="git" url="https://github.com/KevinJump/Our.Umbraco.SilentUpgrade" />
+  </metadata>
+   <files>
+    <file src="bin\release\Our.Umbraco.SilentUpgrade.dll" target="lib\net472" />
+  </files>
+</package>
