@@ -101,12 +101,12 @@ namespace Our.Umbraco.SilentUpgrade
             logger.Debug<SilentUpgradeComponent>("Silently upgrading the Site");
 
             // The 'current' steps for upgrading Umbraco
+            var initialVersion = globalSettings.ConfigurationStatus;
+            var targetVersion = UmbracoVersion.SemanticVersion.ToSemanticString();
 
             try
             {
 
-                var initialVersion = globalSettings.ConfigurationStatus;
-                var targetVersion = UmbracoVersion.SemanticVersion.ToSemanticString();
 
                 SilentUpgrade.FireUpgradeStarting(initialVersion, targetVersion);
 
@@ -149,6 +149,8 @@ namespace Our.Umbraco.SilentUpgrade
             }
             catch(Exception ex)
             {
+                SilentUpgrade.FireUpgradeComplete(false, initialVersion, targetVersion, ex.Message);
+
                 logger.Warn<SilentUpgradeComponent>(ex, "Silent Upgrade Failed");
                 Upgraded = false; // if this is false, we should fall through to the 'standard' upgrade path.
             }

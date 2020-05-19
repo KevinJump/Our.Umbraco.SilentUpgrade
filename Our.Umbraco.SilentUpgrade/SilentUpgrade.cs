@@ -14,13 +14,14 @@ namespace Our.Umbraco.SilentUpgrade
         public static event UpgradeEventHandler UpgradeStarting;
         public static event UpgradeEventHandler UpgradeComplete;
 
-        public static void FireUpgradeComplete(bool success, string initialVersion, string finalVersion)
+        public static void FireUpgradeComplete(bool success, string initialVersion, string finalVersion, string message = "")
         {
             UpgradeComplete?.Invoke(new UpgradeEventArgs
             {
                 VersionFrom = initialVersion,
                 VersionTo = finalVersion,
-                Success = success
+                Success = success,
+                Message = message
             });
         }
 
