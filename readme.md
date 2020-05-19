@@ -20,6 +20,11 @@ and the site will be updated.
 If the process fails then the site will fall back to the default install
 screen and you will have to process through the steps as normal.
 
+## Disclaimer
+While every effort has been made to test the upgrade of umbraco between
+versions using this package, we cannot accept any responsability to 
+a botched update or missing things. **You should always test upgrades 
+before putting them somewhere that you care about**
 
 ## Known Issues
 

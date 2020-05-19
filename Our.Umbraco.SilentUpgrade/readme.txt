@@ -14,4 +14,6 @@ Silent Upgrades will attempt to run everytime you upgrade your
 umbraco installation. If the process fails, It will fallback 
 to the standard installation screen.
 
-
+############################################################################
+## Always test your upgrades before putting them somewhere you care about ##
+############################################################################
