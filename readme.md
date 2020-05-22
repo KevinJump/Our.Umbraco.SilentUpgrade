@@ -33,7 +33,7 @@ before putting them somewhere that you care about**
   For reasons i've not yet worked out, the upgrade to a 8.0.x version 
   from another doesn't work (e.g 8.0.0 to 8.0.2). 
 
-  Upgrading from 8.1.x works fine.
+  Upgrading to 8.1.x or above works fine.
  
 
 ## Debuging
