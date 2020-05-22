@@ -101,9 +101,14 @@ namespace Our.Umbraco.SilentUpgrade
             logger.Debug<SilentUpgradeComponent>("Silently upgrading the Site");
 
             // The 'current' steps for upgrading Umbraco
+            var initialVersion = globalSettings.ConfigurationStatus;
+            var targetVersion = UmbracoVersion.SemanticVersion.ToSemanticString();
 
             try
             {
+
+
+                SilentUpgrade.FireUpgradeStarting(initialVersion, targetVersion);
 
                 //
                 // If these steps change in the core then this will be wrong.
@@ -131,17 +136,21 @@ namespace Our.Umbraco.SilentUpgrade
                 // Step: 'SetUmbracoVersionStep'
 
                 // Update the version number inside the web.config
-                logger.Debug<SilentUpgradeComponent>("Updating version in the web.config {version}", UmbracoVersion.SemanticVersion.ToSemanticString());
+                logger.Debug<SilentUpgradeComponent>("Updating version in the web.config {version}", targetVersion);
                 // Doing this essentially restats the site.
-                globalSettings.ConfigurationStatus = UmbracoVersion.SemanticVersion.ToSemanticString();
+                globalSettings.ConfigurationStatus = targetVersion;
 
                 // put something in the log.
-                logger.Info<SilentUpgradeComponent>("Silent Upgrade Completed {version}", UmbracoVersion.SemanticVersion.ToSemanticString());
+                logger.Info<SilentUpgradeComponent>("Silent Upgrade Completed {version}", targetVersion);
+
+                SilentUpgrade.FireUpgradeComplete(true, initialVersion, targetVersion);
 
                 Upgraded = true;
             }
             catch(Exception ex)
             {
+                SilentUpgrade.FireUpgradeComplete(false, initialVersion, targetVersion, ex.Message);
+
                 logger.Warn<SilentUpgradeComponent>(ex, "Silent Upgrade Failed");
                 Upgraded = false; // if this is false, we should fall through to the 'standard' upgrade path.
             }
