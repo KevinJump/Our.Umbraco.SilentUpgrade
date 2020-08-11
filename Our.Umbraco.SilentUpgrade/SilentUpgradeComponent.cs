@@ -21,7 +21,7 @@
 using System;
 using System.Configuration;
 using System.Web;
-using NPoco.Expressions;
+
 using Umbraco.Core;
 using Umbraco.Core.Composing;
 using Umbraco.Core.Configuration;
@@ -106,7 +106,8 @@ namespace Our.Umbraco.SilentUpgrade
 
             try
             {
-
+                // to make sure we are working through the steps.
+                // we keep an eye on : https://github.com/umbraco/Umbraco-CMS/tree/v8/contrib/src/Umbraco.Web/Install/InstallSteps
 
                 SilentUpgrade.FireUpgradeStarting(initialVersion, targetVersion);
 
@@ -183,6 +184,9 @@ namespace Our.Umbraco.SilentUpgrade
                 UmbracoVersion.SemanticVersion, DateTime.UtcNow, "yyyyMMdd");
             // Delete ClientDependency temp directories to make sure we get fresh caches
             var clientDependencyTempFilesDeleted = clientDependencyConfig.ClearTempFiles(httpContext);
+
+            logger.Debug<SilentUpgradeComponent>("Updated Client Dependency {cdfUpdate} Deleted Temp Files {tmpDeleted}",
+                clientDependencyUpdated, clientDependencyTempFilesDeleted);
 
         }
 
