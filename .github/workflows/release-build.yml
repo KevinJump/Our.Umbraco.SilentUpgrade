@@ -35,7 +35,7 @@ jobs:
         run: nuget restore
 
       - name: Build Project
-        run: msbuild /p:configuration=${{ env.CONFIG }}  
+        run: msbuild ./Our.Umbraco.SilentUpgrade /p:configuration=${{ env.CONFIG }}  
 
       # package bits.
       - name: Setup .net core
@@ -58,7 +58,7 @@ jobs:
 
       # Nuget Push
       - name: Push NuGet Package
-        run: NuGet push ${{ env.OUTPUT }}/Our-Umbraco-SilentUpgrade.${{ steps.get_version.outputs.VERSION }}.nupkg ${{ secrets.NUGET_KEY }} -source "nuget.org"
+        run: NuGet push ${{ env.OUTPUT }}/Our.Umbraco.SilentUpgrade.${{ steps.get_version.outputs.VERSION }}.nupkg ${{ secrets.NUGET_KEY }} -source "nuget.org"
 
 
       # Upload results to the build artifacts folder
