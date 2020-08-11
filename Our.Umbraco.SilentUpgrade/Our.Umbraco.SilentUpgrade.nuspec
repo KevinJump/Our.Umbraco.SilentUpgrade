@@ -22,6 +22,6 @@
   </metadata>
    <files>
 		 <file src="readme.txt" target="readme.txt" />
-		 <file src="bin\release\Our.Umbraco.SilentUpgrade.dll" target="lib\net472" />
+		 <file src="bin\$Configuration$\Our.Umbraco.SilentUpgrade.dll" target="lib\net472" />
   </files>
 </package>

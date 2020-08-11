@@ -3,40 +3,26 @@
 name: Build
 
 env:
-  OUTPUT: ./Output
-  LIBRARY_FOLDER: ./Our.Umbraco.SilentUpgrade
-  BUILD_CONFIG: "Release"
+  CONFIG: Release
 
-# Controls when the action will run. Triggers the workflow on push or pull request
-# events but only for the master branch
 on:
   push:
     branches:
-      - "master"
-    tags:
-      - "release/*"
+      - master
+  pull_request:
+    branches: 
+      - master      
 
 jobs:
   build: 
     runs-on: windows-latest
     steps:      
-      - name: Get Version 
-        id: get_version
-        run: echo ::set-output name=VERSION::${GITHUB_REF/refs\/tags\/release\//}
-        shell: bash
-      
       - name: checkout
         uses: actions/checkout@v2
         
       - name: Setup NuGet.exe for use with actions
         uses: NuGet/setup-nuget@v1.0.2        
-        
-      - name: Setup .net core
-        uses: actions/setup-dotnet@v1.4.0
-      
-      - name: Setup UmbPack
-        run: dotnet tool install Umbraco.Tools.Packages --global
-        
+
       - name: Setup MSBuild
         uses: microsoft/setup-msbuild@v1
      
@@ -45,4 +31,4 @@ jobs:
         run: nuget restore
 
       - name: Build Project
-        run: msbuild /p:configuration=Release  
+        run: msbuild /p:configuration=${{ env.CONFIG }}  

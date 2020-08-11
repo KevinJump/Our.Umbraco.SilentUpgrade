@@ -1,0 +1,62 @@
+# Build the project
+
+name: release-build
+
+env:
+  OUTPUT: ./Output
+  LIBRARY_FOLDER: ./Our.Umbraco.SilentUpgrade
+  CONFIG: Release
+
+# runs when we tag the release
+on:
+  push:
+    tags:
+      - "release/*"
+jobs:
+  build: 
+    runs-on: windows-latest
+    steps:      
+      - name: checkout
+        uses: actions/checkout@v2
+        
+      - name: Setup NuGet.exe for use with actions
+        uses: NuGet/setup-nuget@v1.0.2        
+
+      - name: Setup MSBuild
+        uses: microsoft/setup-msbuild@v1
+     
+      # restore packages
+      - name: nuget restore
+        run: nuget restore
+
+      - name: Build Project
+        run: msbuild /p:configuration=${{ env.CONFIG }}  
+
+      # package bits.
+      - name: Get Version 
+        id: version
+        run: echo ::set-output name=VERSION::${GITHUB_REF/refs\/tags\/release\//}
+        shell: bash
+
+      - name: Setup .net core
+        uses: actions/setup-dotnet@v1.4.0
+      
+      - name: Setup UmbPack
+        run: dotnet tool install Umbraco.Tools.Packages --global
+
+      # nuget
+      - name: Create Nuget Package
+        run: nuget pack ./Our.Umbraco.SilentUpgrade/Our.Umbraco.SilentUpgrade.nuspec -OutputDirectory ${{ env.OUTPUT }} -version ${{ steps.version.output.VERSION }} -properties "Configuration=${{ env.CONFIG }}"
+
+      # Umb Pack 
+      - name: Create Umbraco Package
+        run: UmbPack pack ./dist/package.xml -o ${{ env.OUTPUT }} -v ${{ steps.version.output.VERSION }} 
+
+      # Upload results to the build artifacts folder
+      - name: upload-artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: Build-Results-${{ steps.version.output.VERSION }}
+          path: ${{ env.OUTPUT }}/**/*        
+
+
