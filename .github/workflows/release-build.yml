@@ -4,8 +4,11 @@ name: release-build
 
 env:
   OUTPUT: ./Output
-  LIBRARY_FOLDER: ./Our.Umbraco.SilentUpgrade
   CONFIG: Release
+  LIBRARY_FOLDER: ./Our.Umbraco.SilentUpgrade
+  NUGET_PACKAGE_NAME: Our.Umbraco.SilentUpgrade
+  UMB_PACKAGE_NAME: Our_Umbraco_SilentUpgrade
+  UMB_VERSIONS: v860,v850,v840,v830,v820,v810
 
 # runs when we tag the release
 on:
@@ -35,18 +38,18 @@ jobs:
         run: nuget restore
 
       - name: Build Project
-        run: msbuild ./Our.Umbraco.SilentUpgrade /p:configuration=${{ env.CONFIG }}  
+        run: msbuild ${{ env.LIBRARY_FOLDER }} /p:configuration=${{ env.CONFIG }}
 
       # package bits.
       - name: Setup .net core
         uses: actions/setup-dotnet@v1.4.0
       
       - name: Setup UmbPack
-        run: dotnet tool install Umbraco.Tools.Packages --global
+        run: dotnet tool install Umbraco.Tools.Packages -g -v m
 
       # nuget
       - name: Create Nuget Package
-        run: nuget pack ./Our.Umbraco.SilentUpgrade/Our.Umbraco.SilentUpgrade.nuspec -OutputDirectory ${{ env.OUTPUT }} -version ${{ steps.get_version.outputs.VERSION }} -properties "Configuration=${{ env.CONFIG }}"
+        run: nuget pack ./Our.Umbraco.SilentUpgrade/${{ env.NUGET_PACKAGE_NAME }}.nuspec -OutputDirectory ${{ env.OUTPUT }} -version ${{ steps.get_version.outputs.VERSION }} -properties "Configuration=${{ env.CONFIG }}"
 
       # Umb Pack 
       - name: Create Umbraco Package
@@ -54,12 +57,11 @@ jobs:
 
       # Push Pack
       - name: Push Umbraco Package
-        run: UmbPack push ${{ env.OUTPUT }}/Our_Umbraco_SilentUpgrade_${{ steps.get_version.outputs.VERSION }}.zip -k ${{ secrets.UMBPACK_KEY }} -a * -w v860,v850,v840,v830,v820,v810
+        run: UmbPack push ${{ env.OUTPUT }}/${{ env.UMB_PACKAGE_NAME }}_${{ steps.get_version.outputs.VERSION }}.zip -k ${{ secrets.UMBPACK_KEY }} -a * -w ${{ env.UMB_VERSIONS }}
 
       # Nuget Push
       - name: Push NuGet Package
-        run: NuGet push ${{ env.OUTPUT }}/Our.Umbraco.SilentUpgrade.${{ steps.get_version.outputs.VERSION }}.nupkg ${{ secrets.NUGET_KEY }} -source "nuget.org"
-
+        run: NuGet push ${{ env.OUTPUT }}/${{ env.NUGET_PACKAGE_NAME }}.${{ steps.get_version.outputs.VERSION }}.nupkg ${{ secrets.NUGET_KEY }} -source "nuget.org"
 
       # Upload results to the build artifacts folder
       - name: upload-artifacts
@@ -67,5 +69,31 @@ jobs:
         with:
           name: Build-Results-${{ steps.get_version.outputs.VERSION }}
           path: ${{ env.OUTPUT }}/**/*        
+
+      # release stuff.
+      - name: Create a release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ github.ref }}
+          release_name: Release v${{ steps.get_version.outputs.VERSION }}
+          body: | 
+            New Release ${{ steps.get_version.outputs.VERSION }}
+          draft: false
+          prerelease: true
+          
+      - name: Upload Release Asset      
+        id: upload_release_asset
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ${{ env.OUTPUT }}/${{ env.NUGET_PACKAGE_NAME }}.${{ steps.get_version.outputs.VERSION }}.nupkg
+          asset_name: ${{ env.NUGET_PACKAGE_NAME }}.${{ steps.get_version.outputs.VERSION }}.nupkg
+          asset_content_type: application/zip
+
 
 
