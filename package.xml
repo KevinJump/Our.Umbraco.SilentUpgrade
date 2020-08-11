@@ -1,0 +1,34 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<umbPackage>
+  <info>
+    <package>
+      <name>Our.Umbraco.SilentUpgrade</name>
+      <version>8.1.0</version>
+      <iconUrl></iconUrl>
+      <licence url="https://opensource.org/licenses/MIT">MIT</licence>
+      <url>http://jumoo.co.uk</url>
+      <requirements type="strict">
+        <major>8</major>
+        <minor>1</minor>
+        <patch>0</patch>
+      </requirements>
+    </package>
+    <author>
+      <name>Kevin Jump</name>
+      <website>http://jumoo.co.uk</website>
+    </author>
+    <readme><![CDATA[Upgrade your Umbraco sites without hitting the upgrade screens]]></readme>
+  </info>
+	<files>
+		<file path="Our.Umbraco.SilentUpgrade/bin/release/Our.Umbraco.SilentUpgrade.dll" orgPath="bin/Our.Umbraco.SilentUpgrade.dll" />
+	</files>
+  <Actions />
+  <control />
+  <DocumentTypes />
+  <Templates />
+  <Stylesheets />
+  <Macros />
+  <DictionaryItems />
+  <Languages />
+  <DataTypes />
+</umbPackage>
