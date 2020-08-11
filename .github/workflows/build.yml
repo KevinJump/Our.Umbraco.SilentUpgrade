@@ -17,9 +17,8 @@ on:
       - "release/*"
 
 jobs:
-  build:
+  build: 
     runs-on: windows-latest
-
     steps:      
       - name: Get Version 
         id: get_version
@@ -40,6 +39,10 @@ jobs:
         
       - name: Setup MSBuild
         uses: microsoft/setup-msbuild@v1
-      
+     
+      # restore packages
+      - name: nuget restore
+        run: nuget restore
+
       - name: Build Project
-        run: msbuild ./src -p:Configuration=${{ env.CONFIG }}  
+        run: msbuild -p:Configuration=${{ env.CONFIG }}  
