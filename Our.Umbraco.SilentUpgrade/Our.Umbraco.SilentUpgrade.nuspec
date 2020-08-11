@@ -9,9 +9,8 @@
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description><![CDATA[Performs the Umbraco upgrades in the background so you (and your users) don't see the install screen]]></description>
     <summary>Performs Umbraco upgrades in the background.</summary>
-    <releaseNotes><![CDATA[
-    8.0.0 - Initial Release for v8
-    ]]></releaseNotes>
+    <releaseNotes><![CDATA[8.0.0 - Initial Release for v8
+		8.1.0 - First "Final" Release]]></releaseNotes>
     <dependencies>
 			<group targetFramework=".NETFramework4.7.2">
 			  <dependency id="UmbracoCms.Web" version="[8,9)"/>
