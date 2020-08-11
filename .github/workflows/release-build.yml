@@ -53,12 +53,12 @@ jobs:
         run: UmbPack pack ./package.xml -o ${{ env.OUTPUT }} -v ${{ steps.get_version.outputs.VERSION }} 
 
       # Push Pack
-      - name: Push Umbraco Package
-        run: UmbPack push ${{ env.OUTPUT }}/Our_Umbraco_SilentUpgrade_${{ steps.get_version.outputs.VERSION }}.zip -k ${{ secrets.UMBPACK_KEY }} -a * -w v860,v850,v840,v830,v820,v810
+      # - name: Push Umbraco Package
+      #   run: UmbPack push ${{ env.OUTPUT }}/Our_Umbraco_SilentUpgrade_${{ steps.get_version.outputs.VERSION }}.zip -k ${{ secrets.UMBPACK_KEY }} -a * -w v860,v850,v840,v830,v820,v810
 
       # Nuget Push
       - name: Push NuGet Package
-        run: NuGet push ${{ env.OUTPUT }}/Our-Umbraco-SilentUpgrade.${{ steps.get_version.outputs.VERSION }}.nupkg ${{ secrets.NUGET_KEY }}
+        run: NuGet push ${{ env.OUTPUT }}/Our-Umbraco-SilentUpgrade.${{ steps.get_version.outputs.VERSION }}.nupkg ${{ secrets.NUGET_KEY }} -source "nuget.org"
 
 
       # Upload results to the build artifacts folder
